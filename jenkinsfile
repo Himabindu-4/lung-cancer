@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+
+        stage('Run Preprocessing') {
+            steps {
+                sh 'python data_preprocessing.py'
+            }
+        }
+
+        stage('Train Model') {
+            steps {
+                sh 'python model_training.py'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'python -m unittest discover tests/'
+            }
+        }
+
+        stage('Archive Results') {
+            steps {
+                archiveArtifacts artifacts: 'model.pkl', allowEmptyArchive: true
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'test-reports/*.xml'
+        }
+    }
+}
