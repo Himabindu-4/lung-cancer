@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "rice leaf Prediction API"
+    return "lung cancer Prediction API"
 
 @app.route('/predict', methods=['POST'])
 def predict():
